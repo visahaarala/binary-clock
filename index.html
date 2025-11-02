@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Binary clock</title>
+  </head>
+
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      height: 100svh;
+      background-color: #222;
+    }
+
+    .container {
+      position: relative;
+      height: 20rem;
+      width: 20rem;
+      background-color: #222;
+      transform: scaleX(-1);
+    }
+
+    .inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      width: 85%;
+      height: 87%;
+      background-color: #222;
+      border-radius: 50%;
+    }
+
+    .seconds,
+    .minutes {
+      transform: translateX(-50%) translateY(-50%) rotate(33deg);
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <div class="hours inner">
+        <div class="inner">
+          <div class="minutes inner">
+            <div class="inner">
+              <div class="seconds inner">
+                <div class="inner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    const getBinary = (number, length) => {
+      let rs = number.toString(2);
+      while (rs.length < length) {
+        rs = '0' + rs;
+      }
+      return rs;
+    };
+
+    const generateConicGradient = (binary) => {
+      let ddegs = 360 / binary.length - 4;
+      let inner = '#844 0deg 2deg';
+      let degs = 2;
+      let index = 0;
+      while (index < binary.length) {
+        inner +=
+          `, ${binary[index] === '1' ? 'red' : '#444'} ${degs}deg ${
+            degs + ddegs
+          }deg` + `, #222 ${degs + ddegs}deg ${degs + ddegs + 4}deg`;
+        degs += ddegs + 4;
+        index++;
+      }
+
+      return `conic-gradient(${inner})`;
+    };
+
+    const updateBinary = () => {
+      const time = new Date();
+      const hours = getBinary(time.getHours(), 5);
+      const minutes = getBinary(time.getMinutes(), 6);
+      const seconds = getBinary(time.getSeconds(), 6);
+
+      document.querySelector('.hours').style.backgroundImage =
+        generateConicGradient(hours);
+      document.querySelector('.minutes').style.backgroundImage =
+        generateConicGradient(minutes);
+      document.querySelector('.seconds').style.backgroundImage =
+        generateConicGradient(seconds);
+    };
+
+    updateBinary();
+
+    setInterval(updateBinary, 10); // 100 times per second to be accurate
+  </script>
+</html>
