@@ -19,7 +19,7 @@
 
     .container {
       position: relative;
-      height: 20rem;
+      height: 23rem;
       width: 20rem;
       background-color: #222;
       transform: scaleX(-1);
@@ -30,8 +30,8 @@
       top: 50%;
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
-      height: calc(95% - 1rem);
-      width: calc(93% - 1rem);
+      height: calc(92% - 1rem);
+      width: calc(95% - 1rem);
       background-color: #222;
       border-radius: 50%;
     }
@@ -74,7 +74,7 @@
       let index = 0;
       while (index < binary.length) {
         inner +=
-          `, ${binary[index] === '1' ? 'red' : '#444'} ${degs}deg ${
+          `, ${binary[index] === '1' ? 'crimson' : '#444'} ${degs}deg ${
             degs + ddegs
           }deg` + `, #222 ${degs + ddegs}deg ${degs + ddegs + 4}deg`;
         degs += ddegs + 4;
