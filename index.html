@@ -14,14 +14,15 @@
       flex-direction: column;
       height: 100vh;
       height: 100svh;
-      background-color: #222;
+      background-color: #151510;
+      font-family: sans-serif;
     }
 
     .container {
       position: relative;
       height: 23rem;
       width: 20rem;
-      background-color: #222;
+      background-color: inherit;
       transform: scaleX(-1);
     }
 
@@ -31,14 +32,19 @@
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
       height: calc(92% - 1rem);
-      width: calc(95% - 1rem);
-      background-color: #222;
-      border-radius: 50%;
+      width: calc(96% - 1rem);
+      background-color: inherit;
+      border-radius: 30%;
     }
 
-    .minutes,
-    .seconds {
-      transform: translateX(-50%) translateY(-50%) rotate(0deg);
+    .digital {
+      color: #dc143cee;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%) scaleX(-1) scaleY(2.7);
+      font-size: 1.6rem;
+      font-weight: 100;
     }
   </style>
 
@@ -55,6 +61,7 @@
           </div>
         </div>
       </div>
+      <div class="digital"></div>
     </div>
   </body>
 
@@ -69,37 +76,50 @@
 
     const generateConicGradient = (binary) => {
       let ddegs = 360 / binary.length - 4;
-      let inner = '#222 0deg 2deg';
+      let inner = 'transparent 0deg 2deg';
       let degs = 2;
       let index = 0;
       while (index < binary.length) {
-        inner +=
-          `, ${binary[index] === '1' ? 'crimson' : '#444'} ${degs}deg ${
-            degs + ddegs
-          }deg` + `, #222 ${degs + ddegs}deg ${degs + ddegs + 4}deg`;
-        degs += ddegs + 4;
+        inner += `, ${binary[index] === '1' ? '#dc143cee' : '#333'} ${degs}deg ${
+          degs + ddegs
+        }deg`;
+        degs += ddegs;
+        inner += `, transparent ${degs}deg ${degs > 356 ? degs + 2 : degs + 4}deg`;
+        degs += 4;
         index++;
       }
 
       return `conic-gradient(${inner})`;
     };
 
-    const updateBinary = () => {
-      const time = new Date();
-      const hours = getBinary(time.getHours(), 5);
-      const minutes = getBinary(time.getMinutes(), 6);
-      const seconds = getBinary(time.getSeconds(), 6);
-
-      document.querySelector('.hours').style.backgroundImage =
-        generateConicGradient(hours);
-      document.querySelector('.minutes').style.backgroundImage =
-        generateConicGradient(minutes);
-      document.querySelector('.seconds').style.backgroundImage =
-        generateConicGradient(seconds);
+    const addZero = (number) => {
+      if (number < 10) {
+        return '0' + number;
+      } else {
+        return number;
+      }
     };
 
-    updateBinary();
+    const updateClock = () => {
+      const time = new Date();
+      const hours = time.getHours();
+      const minutes = time.getMinutes();
+      const seconds = time.getSeconds();
 
-    setInterval(updateBinary, 10);
+      document.querySelector('.hours').style.backgroundImage =
+        generateConicGradient(getBinary(hours, 5));
+      document.querySelector('.minutes').style.backgroundImage =
+        generateConicGradient(getBinary(minutes, 6));
+      document.querySelector('.seconds').style.backgroundImage =
+        generateConicGradient(getBinary(seconds, 6));
+
+      document.querySelector('.digital').innerHTML = `${addZero(
+        hours
+      )}:${addZero(minutes)}:${addZero(seconds)}`;
+    };
+
+    updateClock();
+
+    setInterval(updateClock, 100);
   </script>
 </html>
